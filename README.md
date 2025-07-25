@@ -31,6 +31,11 @@ claude
 claude-flow init --force
 ```
 
+To start an next.js dev Server run:
+```bash
+npm run dev -- -H 0.0.0.0
+```
+After that you can run http://localhost:4001 on the Host. For more Info see .yml
 
 ## Authentication
 
