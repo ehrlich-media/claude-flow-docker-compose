@@ -22,7 +22,7 @@ docker exec -it claude-flow-container su - claude
 
 ## Use claude and claude-flow
 
-Connect the claude user:
+Connect with the claude user and than use:
 
 ```bash
 claude
