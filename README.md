@@ -1,11 +1,13 @@
 # Container README
 
+Developed on Ubuntu 24
+
 ## Starting the Container
 
 To start the container, use the following command:
 
 ```bash
-docker run -it <container-image-name>
+docker-compose -f docker-compose-claude-flow.yml up -d
 ```
 
 **Note:** After starting the container, please wait a moment for the startup script to complete before proceeding.
@@ -15,8 +17,20 @@ docker run -it <container-image-name>
 To connect to the container as the claude user:
 
 ```bash
-docker exec -it -u claude <container-id> /bin/bash
+docker exec -it claude-flow-container su - claude
 ```
+
+## Use claude and claude-flow
+
+Connect the claude user:
+
+```bash
+claude
+```
+```bash
+claude-flow init --force
+```
+
 
 ## Authentication
 
