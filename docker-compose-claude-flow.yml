@@ -1,0 +1,68 @@
+services:
+  claude:
+    image: node:20
+    container_name: claude-flow-container
+    
+    # Basis-Sicherheit
+    hostname: sandbox
+    
+    # Seccomp-Profile
+    security_opt:
+      - seccomp:./seccomp-profile.json
+    
+    # Alle Capabilities droppen
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - DAC_OVERRIDE
+      - FOWNER
+      - SETUID
+      - SETGID
+    
+    # Ressourcenlimits
+    mem_limit: 8g
+    memswap_limit: 8g
+    cpus: 4
+    pids_limit: 500
+    
+    # Netzwerk (brauchen wir für npm)
+    networks:
+      - secure_net
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    
+    # Ports für Entwicklung
+    ports:
+      - "4001:3000"  # React/Node.js dev server (Host:Container)
+      - "4174:5173"  # Vite dev server
+      - "4081:8080"  # Alternative ports
+    
+    volumes:
+      - ./workspace:/workspace:rw
+      - ./claude-config:/config:ro
+      - ./startup-complete.sh:/startup.sh:ro
+      - ~/.ssh:/host-ssh:ro
+    
+    tmpfs:
+      - /tmp:size=10g,exec
+      - /home:size=200g,exec
+      - /var:size=5g
+      - /run:size=1g
+    
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
+      - NODE_ENV=production
+      - PS1=[SECURE-NODE]$$ 
+    
+    working_dir: /workspace
+    tty: true
+    stdin_open: true
+    restart: "no"
+    
+    command: /bin/bash /startup.sh
+
+networks:
+  secure_net:
+    driver: bridge
